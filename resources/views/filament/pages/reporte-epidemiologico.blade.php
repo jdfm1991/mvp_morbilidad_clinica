@@ -10,10 +10,6 @@
                         Generar Reporte
                     </x-filament::button>
 
-                    {{-- Aquí irá el botón de exportación luego --}}
-                    <x-filament::button color="gray" icon="heroicon-o-arrow-down-tray" tag="a" href="#">
-                        Exportar (Próximamente)
-                    </x-filament::button>
                 </div>
             </form>
         </x-filament::section>

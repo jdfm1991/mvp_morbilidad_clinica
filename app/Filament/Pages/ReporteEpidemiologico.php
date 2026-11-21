@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use App\Exports\ReporteMorbilidadExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use UnitEnum;
 
 class ReporteEpidemiologico extends Page implements HasForms
@@ -116,6 +120,31 @@ class ReporteEpidemiologico extends Page implements HasForms
             'total_masculino' => $resultados->flatten()->sum('total_masculino'),
             'total_femenino' => $resultados->flatten()->sum('total_femenino'),
             'pacientes_unicos' => $resultados->flatten()->sum('pacientes_unicos'),
+        ];
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('exportar_excel')
+                ->label('Exportar a Excel')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('success')
+                ->action(function () {
+                    // Validar que haya datos
+                    if (empty($this->resultados) || $this->totales['total_casos'] === 0) {
+                        Notification::make()
+                            ->title('No hay datos para exportar')
+                            ->warning()
+                            ->send();
+                        return;
+                    }
+
+                    return Excel::download(
+                        new ReporteMorbilidadExport($this->resultados, $this->fechaInicio, $this->fechaFin, $this->totales),
+                        'Reporte_Morbilidad_' . $this->fechaInicio . '_' . $this->fechaFin . '.xlsx'
+                    );
+                }),
         ];
     }
 
