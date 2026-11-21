@@ -17,6 +17,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SedeSeeder::class,
+            CriterioResolutivoSeeder::class,
+            TipoAtencionSeeder::class,
+            GrupoEtarioSeeder::class,
         ]);
     }
 }
