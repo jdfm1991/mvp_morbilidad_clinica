@@ -73,7 +73,8 @@ class AtencionsTable
                     ->label('Atender')
                     ->icon('heroicon-o-clipboard-document-check')
                     ->color('success')
-                    ->visible(fn($record) => $record->estado === 'en_espera') // Solo aparece si está en espera
+                    ->visible(fn($record) => $record->estado === 'en_espera'
+                        && auth()->user()->hasAnyRole(['administrador', 'medico']))
                     ->form([
                         Select::make('cie10_principal_id')
                             ->label('Diagnóstico Principal (CIE-10)')

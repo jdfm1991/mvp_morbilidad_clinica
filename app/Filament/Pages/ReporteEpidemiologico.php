@@ -153,4 +153,9 @@ class ReporteEpidemiologico extends Page implements HasForms
     {
         $this->generarReporte();
     }
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->hasAnyRole(['administrador', 'epidemiologia', 'medico']);
+    }
 }

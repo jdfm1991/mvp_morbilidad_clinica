@@ -35,13 +35,6 @@ class AtencionResource extends Resource
         return AtencionsTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
@@ -49,5 +42,15 @@ class AtencionResource extends Resource
             'create' => CreateAtencion::route('/create'),
             'edit' => EditAtencion::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasAnyRole(['administrador', 'admision', 'medico']);
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->hasAnyRole(['administrador', 'admision']);
     }
 }

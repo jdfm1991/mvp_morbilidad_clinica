@@ -35,12 +35,6 @@ class PacienteResource extends Resource
         return PacientesTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
 
     public static function getPages(): array
     {
@@ -49,5 +43,20 @@ class PacienteResource extends Resource
             'create' => CreatePaciente::route('/create'),
             'edit' => EditPaciente::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasAnyRole(['administrador', 'admision', 'medico', 'epidemiologia']);
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->hasAnyRole(['administrador', 'admision']);
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()->hasAnyRole(['administrador', 'admision']);
     }
 }
