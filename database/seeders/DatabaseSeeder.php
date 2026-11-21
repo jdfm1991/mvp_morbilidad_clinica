@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CriterioResolutivoSeeder::class,
             TipoAtencionSeeder::class,
             GrupoEtarioSeeder::class,
+            Cie10Seeder::class,
         ]);
     }
 }
