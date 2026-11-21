@@ -19,7 +19,7 @@ class AtencionResource extends Resource
 {
     protected static ?string $model = Atencion::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::InboxStack;
     protected static string|UnitEnum|null $navigationGroup = 'Atención al Paciente';
     protected static ?string $navigationLabel = 'Atenciones';
     protected static ?string $modelLabel = 'Atencione';

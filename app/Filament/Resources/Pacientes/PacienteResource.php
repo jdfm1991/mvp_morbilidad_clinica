@@ -19,7 +19,7 @@ class PacienteResource extends Resource
 {
     protected static ?string $model = Paciente::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::FolderPlus;
     protected static string|UnitEnum|null $navigationGroup = 'Atención al Paciente';
     protected static ?string $navigationLabel = 'Pacientes';
     protected static ?string $modelLabel = 'Paciente';
