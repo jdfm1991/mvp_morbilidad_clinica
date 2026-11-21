@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             TipoAtencionSeeder::class,
             GrupoEtarioSeeder::class,
             Cie10Seeder::class,
+            GeografiaSeeder::class
         ]);
     }
 }

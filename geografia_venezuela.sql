@@ -1,16 +1,16 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-CREATE TABLE IF NOT EXISTS `ciudades` (
-  `id_ciudad` int(11) NOT NULL AUTO_INCREMENT,
-  `id_estado` int(11) NOT NULL,
-  `ciudad` varchar(200) NOT NULL,
-  `capital` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id_ciudad`),
-  KEY `id_estado` (`id_estado`)
+CREATE TABLE IF NOT EXISTS ciudades (
+  id_ciudad int(11) NOT NULL AUTO_INCREMENT,
+  id_estado int(11) NOT NULL,
+  ciudad varchar(200) NOT NULL,
+  capital tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id_ciudad),
+  KEY id_estado (id_estado)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=523 ;
 
-INSERT INTO `ciudades` (`id_ciudad`, `id_estado`, `ciudad`, `capital`) VALUES
+INSERT INTO ciudades (id_ciudad, id_estado, ciudad, capital) VALUES
 (1, 1, 'Maroa', 0),
 (2, 1, 'Puerto Ayacucho', 1),
 (3, 1, 'San Fernando de Atabapo', 0),
@@ -510,14 +510,14 @@ INSERT INTO `ciudades` (`id_ciudad`, `id_estado`, `ciudad`, `capital`) VALUES
 (521, 25, 'Isla de Patos', 0),
 (522, 25, 'Islas Los Hermanos', 0);
 
-CREATE TABLE IF NOT EXISTS `estados` (
-  `id_estado` int(11) NOT NULL AUTO_INCREMENT,
-  `estado` varchar(250) NOT NULL,
-  `iso_3166-2` varchar(4) NOT NULL,
-  PRIMARY KEY (`id_estado`)
+CREATE TABLE IF NOT EXISTS estados (
+  id_estado int(11) NOT NULL AUTO_INCREMENT,
+  estado varchar(250) NOT NULL,
+  iso_3166-2 varchar(4) NOT NULL,
+  PRIMARY KEY (id_estado)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
-INSERT INTO `estados` (`id_estado`, `estado`, `iso_3166-2`) VALUES
+INSERT INTO estados (id_estado, estado, iso_3166-2) VALUES
 (1, 'Amazonas', 'VE-X'),
 (2, 'Anzoátegui', 'VE-B'),
 (3, 'Apure', 'VE-C'),
@@ -544,15 +544,15 @@ INSERT INTO `estados` (`id_estado`, `estado`, `iso_3166-2`) VALUES
 (24, 'Distrito Capital', 'VE-A'),
 (25, 'Dependencias Federales', 'VE-Z');
 
-CREATE TABLE IF NOT EXISTS `municipios` (
-  `id_municipio` int(11) NOT NULL AUTO_INCREMENT,
-  `id_estado` int(11) NOT NULL,
-  `municipio` varchar(100) NOT NULL,
-  PRIMARY KEY (`id_municipio`),
-  KEY `id_estado` (`id_estado`)
+CREATE TABLE IF NOT EXISTS municipios (
+  id_municipio int(11) NOT NULL AUTO_INCREMENT,
+  id_estado int(11) NOT NULL,
+  municipio varchar(100) NOT NULL,
+  PRIMARY KEY (id_municipio),
+  KEY id_estado (id_estado)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=463 ;
 
-INSERT INTO `municipios` (`id_municipio`, `id_estado`, `municipio`) VALUES
+INSERT INTO municipios (id_municipio, id_estado, municipio) VALUES
 (1, 1, 'Alto Orinoco'),
 (2, 1, 'Atabapo'),
 (3, 1, 'Atures'),
@@ -889,15 +889,15 @@ INSERT INTO `municipios` (`id_municipio`, `id_estado`, `municipio`) VALUES
 (461, 23, 'Valmore Rodríguez'),
 (462, 24, 'Libertador');
 
-CREATE TABLE IF NOT EXISTS `parroquias` (
-  `id_parroquia` int(11) NOT NULL AUTO_INCREMENT,
-  `id_municipio` int(11) NOT NULL,
-  `parroquia` varchar(250) NOT NULL,
-  PRIMARY KEY (`id_parroquia`),
-  KEY `id_municipio` (`id_municipio`)
+CREATE TABLE IF NOT EXISTS parroquias (
+  id_parroquia int(11) NOT NULL AUTO_INCREMENT,
+  id_municipio int(11) NOT NULL,
+  parroquia varchar(250) NOT NULL,
+  PRIMARY KEY (id_parroquia),
+  KEY id_municipio (id_municipio)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1139 ;
 
-INSERT INTO `parroquias` (`id_parroquia`, `id_municipio`, `parroquia`) VALUES
+INSERT INTO parroquias (id_parroquia, id_municipio, parroquia) VALUES
 (1, 1, 'Alto Orinoco'),
 (2, 1, 'Huachamacare Acanaña'),
 (3, 1, 'Marawaka Toky Shamanaña'),
@@ -2038,11 +2038,11 @@ INSERT INTO `parroquias` (`id_parroquia`, `id_municipio`, `parroquia`) VALUES
 (1138, 462, '23 de enero');
 
 
-ALTER TABLE `ciudades`
-  ADD CONSTRAINT `ciudades_ibfk_1` FOREIGN KEY (`id_estado`) REFERENCES `estados` (`id_estado`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE ciudades
+  ADD CONSTRAINT ciudades_ibfk_1 FOREIGN KEY (id_estado) REFERENCES estados (id_estado) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `municipios`
-  ADD CONSTRAINT `municipios_ibfk_1` FOREIGN KEY (`id_estado`) REFERENCES `estados` (`id_estado`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE municipios
+  ADD CONSTRAINT municipios_ibfk_1 FOREIGN KEY (id_estado) REFERENCES estados (id_estado) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `parroquias`
-  ADD CONSTRAINT `parroquias_ibfk_1` FOREIGN KEY (`id_municipio`) REFERENCES `municipios` (`id_municipio`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE parroquias
+  ADD CONSTRAINT parroquias_ibfk_1 FOREIGN KEY (id_municipio) REFERENCES municipios (id_municipio) ON DELETE CASCADE ON UPDATE CASCADE;
