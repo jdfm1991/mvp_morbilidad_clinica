@@ -27,10 +27,14 @@ class PacienteForm
                         Toggle::make('sin_identificacion')
                             ->label('Paciente sin cédula (Bebé / Indocumentado)')
                             ->live()
-                            ->afterStateUpdated(function (Set $set, $state) {
+                            ->afterStateUpdated(function (Set $set, Get $get, $state) {
                                 if ($state) {
+                                    // Solo generar si el campo código interno está vacío
+                                    // (evita que se regenere al editar un paciente existente)
+                                    if (empty($get('codigo_interno'))) {
+                                        $set('codigo_interno', PacienteService::generarCodigoInterno('RN'));
+                                    }
                                     $set('identificacion', null);
-                                    $set('codigo_interno', PacienteService::generarCodigoInterno('RN'));
                                 } else {
                                     $set('codigo_interno', null);
                                 }
@@ -41,15 +45,15 @@ class PacienteForm
                             ->label('Cédula / Documento')
                             ->maxLength(20)
                             ->unique(ignoreRecord: true)
-                            ->hidden(fn (Get $get) => $get('sin_identificacion'))
-                            ->required(fn (Get $get) => !$get('sin_identificacion')),
+                            ->hidden(fn(Get $get) => $get('sin_identificacion'))
+                            ->required(fn(Get $get) => !$get('sin_identificacion')),
 
                         TextInput::make('codigo_interno')
                             ->label('Código Interno')
                             ->maxLength(20)
                             ->readOnly()
                             ->dehydrated()
-                            ->hidden(fn (Get $get) => !$get('sin_identificacion')),
+                            ->hidden(fn(Get $get) => !$get('sin_identificacion')),
                     ])->columns(2),
 
                 Section::make('Datos Personales')
@@ -91,16 +95,16 @@ class PacienteForm
                             }),
                         Select::make('municipio_id')
                             ->label('Municipio')
-                            ->options(fn (Get $get) => Municipio::where('estado_id', $get('estado_id'))->pluck('nombre', 'id'))
+                            ->options(fn(Get $get) => Municipio::where('estado_id', $get('estado_id'))->pluck('nombre', 'id'))
                             ->searchable()
                             ->live()
-                            ->disabled(fn (Get $get) => !$get('estado_id'))
-                            ->afterStateUpdated(fn (Set $set) => $set('parroquia_id', null)),
+                            ->disabled(fn(Get $get) => !$get('estado_id'))
+                            ->afterStateUpdated(fn(Set $set) => $set('parroquia_id', null)),
                         Select::make('parroquia_id')
                             ->label('Parroquia')
-                            ->options(fn (Get $get) => Parroquia::where('municipio_id', $get('municipio_id'))->pluck('nombre', 'id'))
+                            ->options(fn(Get $get) => Parroquia::where('municipio_id', $get('municipio_id'))->pluck('nombre', 'id'))
                             ->searchable()
-                            ->disabled(fn (Get $get) => !$get('municipio_id')),
+                            ->disabled(fn(Get $get) => !$get('municipio_id')),
                         Textarea::make('direccion')
                             ->label('Dirección Exacta')
                             ->columnSpanFull(),
@@ -113,7 +117,7 @@ class PacienteForm
                             ->relationship('sede', 'nombre')
                             ->default(1)
                             ->required()
-                            ->disabled(fn () => !auth()->user()->isAdmin())
+                            ->disabled(fn() => !auth()->user()->isAdmin())
                             ->dehydrated(),
                     ])
             ]);

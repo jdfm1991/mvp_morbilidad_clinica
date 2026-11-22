@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
 
 #[Fillable(['name', 'email', 'password', 'sede_id', 'activo'])]
 #[Hidden(['password', 'remember_token'])]
@@ -19,6 +22,7 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
     use HasRoles;
+    use LogsActivity;
 
     /**
      * Get the attributes that should be cast.
@@ -41,5 +45,16 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->hasRole('administrador');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            // Solo registra los campos que cambian, sin ensuciar la base de datos
+            ->logOnlyDirty()
+            // No falla si no hay cambios
+            ->dontSubmitEmptyLogs()
+            // Opcional: puedes especificar qué campos registrar exactamente
+            ->logFillable();
     }
 }
