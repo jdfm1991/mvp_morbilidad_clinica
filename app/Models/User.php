@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,11 +14,13 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Filament\Models\Contracts\FilamentUser;
 
 
 #[Fillable(['name', 'email', 'password', 'sede_id', 'activo'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -56,5 +59,10 @@ class User extends Authenticatable
             ->dontSubmitEmptyLogs()
             // Opcional: puedes especificar qué campos registrar exactamente
             ->logFillable();
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->activo === true; // O la lógica que prefieras
     }
 }
